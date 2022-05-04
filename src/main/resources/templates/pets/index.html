@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/layout :: head(~{::title})">
+    <title>Pets</title>
+</head>
+<body th:replace="/fragments/layout :: body(~{::body})">
+<div class="container">
+    <table class="table table-striped align-middle" style="table-layout: fixed">
+        <caption></caption>
+        <thead>
+        <tr>
+            <th class="col-2 text-center" scope="col">Pet ID</th>
+            <th class="col-2 text-center" scope="col">Name</th>
+            <th class="col-2 text-center" scope="col">Type</th>
+            <th class="col-3 text-center" scope="col">Owner</th>
+            <th class="col-2 text-center" scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="pet : ${pets}">
+            <td class="text-center" th:text="${pet.id}"></td>
+            <td class="text-center" th:text="${pet.name}"></td>
+            <td class="text-center" th:text="${pet.type.name}"></td>
+            <td class="text-center" th:text="${pet.owner.name} + ' ' + ${pet.owner.surname}"></td>
+            <td class="text-center">
+                <div class="row justify-content-evenly">
+                    <div class="col-4">
+                        <a class="btn btn-primary w-100" th:href="@{'/pets/edit/' + ${pet.id}}">Edit</a>
+                    </div>
+                    <div class="col-5">
+                        <a class="btn btn-danger w-100" th:href="@{'/pets/delete/' + ${pet.id}}">Delete</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

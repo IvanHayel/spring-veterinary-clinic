@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" th:with="status=${vet.isNew()}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/layout :: head(~{::title})">
+    <title th:text="(${status} ? 'New' : 'Edit') + ' Veterinarian'"></title>
+</head>
+<body th:replace="/fragments/layout :: body(~{::body})">
+<div class="container position-absolute top-50 start-50 translate-middle">
+    <form th:action="'/veterinarians' + (${status} ? '/save' : '/update')" th:method="post" th:object="${vet}">
+        <h2 class="mt-5 text-center">
+            <span th:text="(${status} ? 'New' : 'Edit') + ' Veterinarian'"></span>
+        </h2>
+        <div class="input-group w-25 mt-5 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon0" th:hidden="${status}">ID</span>
+            <input aria-describedby="basic-addon0" aria-label="ID" class="form-control"
+                   placeholder="ID" readonly th:field="*{id}"
+                   th:hidden="${status}" th:value="*{id}" type="text">
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon1">Name</span>
+            <input aria-describedby="basic-addon1" aria-label="Name" class="form-control"
+                   placeholder="Name" required th:field="*{name}"
+                   th:value="*{name}" type="text">
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon2">Surname</span>
+            <input aria-describedby="basic-addon2" aria-label="Surname" class="form-control"
+                   placeholder="Surname" required th:field="*{surname}"
+                   th:value="*{surname}" type="text">
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon3">Experience</span>
+            <input aria-describedby="basic-addon3" aria-label="Experience" class="form-control"
+                   placeholder="Experience" required th:field="*{experience}"
+                   th:value="*{experience}" type="text">
+        </div>
+        <div class="input-group w-25 mt-5 position-relative top-0 start-50 translate-middle">
+            <div class="dropdown w-100">
+                <button aria-expanded="false" class="btn btn-primary dropdown-toggle w-100" data-bs-toggle="dropdown"
+                        id="dropdownMenuButton1" type="button">
+                    Specializations
+                </button>
+                <ul aria-labelledby="dropdownMenuButton1" class="dropdown-menu w-100">
+                    <li class="d-flex gap-2 m-lg-3" th:each="spec: ${allSpecializations}">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" th:checked="${#sets.contains(vet.specializations, spec)}" th:id="${spec.id}"
+                                   th:name="specializationIds" th:value="${spec.id}"
+                                   type="checkbox">
+                            <label class="form-check-label" th:for="${spec.id}" th:text="${spec.name}"></label>
+                            <br/>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="container mt-3 position-relative">
+                <div class="row justify-content-evenly">
+                    <div class="col-5">
+                        <button class="btn btn-success" th:text="(${status} ? 'Save' : 'Update') + ' Vet'"
+                                type="submit"></button>
+                    </div>
+                    <div class="col-3">
+                        <button class="btn btn-secondary" type="reset">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

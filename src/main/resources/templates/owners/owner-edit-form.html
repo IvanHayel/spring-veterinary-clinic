@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" th:with="status=${owner.isNew()}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/layout :: head(~{::title})">
+    <title th:text="(${status} ? 'New' : 'Edit') + ' Owner'"></title>
+</head>
+<body th:replace="/fragments/layout :: body(~{::body})">
+<div class="container-fluid position-relative">
+    <form th:action="'/owners' + (${status} ? '/save' : '/update')" th:method="post" th:object="${owner}">
+        <h2 class="mt-5 text-center">
+            <span th:text="(${status} ? 'New' : 'Edit') + ' Owner'"></span>
+        </h2>
+        <div class="input-group w-25 mt-5 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon0" th:hidden="${status}">ID</span>
+            <input aria-describedby="basic-addon0" aria-label="ID" class="form-control"
+                   placeholder="ID" readonly th:field="*{id}"
+                   th:hidden="${status}" th:value="*{id}" type="text">
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon1">Name</span>
+            <input aria-describedby="basic-addon1" aria-label="Name" class="form-control"
+                   placeholder="Name" required th:field="*{name}"
+                   th:value="*{name}" type="text">
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon2">Surname</span>
+            <input aria-describedby="basic-addon2" aria-label="Surname" class="form-control"
+                   placeholder="Surname" required th:field="*{surname}"
+                   th:value="*{surname}" type="text">
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon3">Phone</span>
+            <input aria-describedby="basic-addon3" aria-label="Phone" class="form-control"
+                   placeholder="Phone" required th:field="*{phone}"
+                   th:value="*{phone}" type="text">
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle"
+             th:with="hasErrors=${#fields.hasErrors('email')}, isEmailEmpty=${#strings.isEmpty(owner.email)}">
+            <span class="input-group-text" id="basic-addon4">Email</span>
+            <input aria-describedby="basic-addon4" aria-label="Email" placeholder="Email"
+                   required
+                   th:class="'form-control' + (${hasErrors}? ' is-invalid' : (${isEmailEmpty}? '' : ' is-valid'))" th:field="*{email}"
+                   th:value="*{email}" type="text">
+            <div th:class="(${hasErrors} ? 'invalid' : 'valid' ) +  '-tooltip w-100 text-center'"
+                 th:errors="*{email}">
+            </div>
+        </div>
+
+        <div class="container mt-4 w-25 position-relative">
+            <div class="row justify-content-evenly">
+                <div class="col-5">
+                    <button class="btn btn-success" th:text="(${status} ? 'Save' : 'Update') + ' Owner'"
+                            type="submit"></button>
+                </div>
+                <div class="col-3">
+                    <button class="btn btn-secondary" type="reset">Clear</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

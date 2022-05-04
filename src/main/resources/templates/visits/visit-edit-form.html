@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" th:with="status=${visit.isNew()}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/fragments/layout :: head(~{::title})">
+    <title th:text="(${status} ? 'New' : 'Edit') + ' Visit'"></title>
+</head>
+<body th:replace="/fragments/layout :: body(~{::body})">
+<div class="container position-absolute top-50 start-50 translate-middle">
+    <form th:action="'/visits' + (${status} ? '/save' : '/update')" th:method="post" th:object="${visit}"
+          th:with="hasGlobalErrors=${#fields.hasGlobalErrors()}">
+        <h2 class="mt-2 text-center">
+            <span th:text="(${status} ? 'New' : 'Edit') + ' Visit'"></span>
+        </h2>
+        <div class="input-group w-25 mt-4 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon0" th:hidden="${status}">ID</span>
+            <input aria-describedby="basic-addon0" aria-label="ID" class="form-control"
+                   placeholder="ID" readonly th:field="*{id}"
+                   th:hidden="${status}" th:value="*{id}" type="text"/>
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon1">Start</span>
+            <input aria-describedby="basic-addon1" aria-label="StartDateTime"
+                   class="form-control bootstrap-datetimepicker-widget text-center"
+                   required th:field="*{startDateTime}"
+                   th:value="*{startDateTime}" type="datetime-local"/>
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon2">Duration</span>
+            <input aria-describedby="basic-addon2" aria-label="Duration"
+                   class="form-control text-center"
+                   required th:field="*{duration}"
+                   th:value="*{duration}" type="time"/>
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon3">Pet</span>
+            <select aria-describedby="basic-addon3" aria-label="Pet" class="form-control form-select"
+                    required th:name="petId">
+                <option th:selected="${status}" th:value="${null}">Select a pet</option>
+                <option th:each="pet : ${allPets}"
+                        th:selected="(${!status} and ${pet.id == visit.pet.id})"
+                        th:text="${pet.id} + '. ' + ${pet.type.name} + ' ' + ${pet.name}"
+                        th:value="${pet.id}">
+                </option>
+            </select>
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon4">Vet</span>
+            <select aria-describedby="basic-addon4" aria-label="Vet" class="form-control form-select"
+                    required th:name="veterinarianId">
+                <option th:selected="${status}" th:value="${null}">Select a veterinarian</option>
+                <option th:each="vet:${allVets}"
+                        th:selected="(${!status} and ${vet.id == visit.veterinarian.id})"
+                        th:text="${vet.id} + '. ' + ${vet.name} + ' ' + ${vet.surname}"
+                        th:value="${vet.id}">
+                </option>
+            </select>
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon5">Diagnosis</span>
+            <input aria-describedby="basic-addon5" aria-label="Diagnosis" class="form-control"
+                   placeholder="Diagnosis" required th:field="*{diagnosis}"
+                   th:value="*{diagnosis}" type="text"/>
+        </div>
+        <div class="input-group w-25 mt-2 position-relative start-50 translate-middle">
+            <span class="input-group-text" id="basic-addon6">Treatment</span>
+            <input aria-describedby="basic-addon6" aria-label="Treatment" class="form-control"
+                   placeholder="Treatment" required th:field="*{treatment}"
+                   th:value="*{treatment}" type="text"/>
+        </div>
+        <div class="form-check form-switch w-25 mt-2 position-relative start-50 translate-middle">
+            <input class="form-check-input" id="flexSwitchCheckDefault" role="switch" th:field="*{status}"
+                   th:value="${visit.status}" type="checkbox">
+            <label class="form-check-label" for="flexSwitchCheckDefault">
+                Visit has already passed.
+            </label>
+        </div>
+        <div class="container mt-2 w-25 position-relative">
+            <div class="row justify-content-evenly">
+                <div class="col-6">
+                    <button class="btn btn-success" th:text="(${status} ? 'Save' : 'Update') + ' Visit'"
+                            type="submit"></button>
+                </div>
+                <div class="col-3">
+                    <button class="btn btn-secondary" type="reset">Clear</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
